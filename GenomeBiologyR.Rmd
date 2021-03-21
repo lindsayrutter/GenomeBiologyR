@@ -11,10 +11,11 @@ output:
     highlight: tango  # specifies the syntax highlighting style
 ---
 
+![](pics/cletus.png)
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
 
 # File types
 ## R Script
@@ -276,6 +277,18 @@ str(my_character)
 str(my_logical)
 ```
 
+Note that you can determine all variables you have stored in your current R session by typing:
+
+```{r}
+ls()
+```
+
+You can remove all variables in your current R session using the `rm(list=ls())` function:
+
+```{r}
+rm(list=ls())
+```
+
 ---
 
 # Basic data structures in R
@@ -448,7 +461,7 @@ Lists can be very helpful inside functions. This is because functions in R can o
 
 A data frame is one of the most important data types in R and is often used for tabular information in statistics. A data frame is a list, where every element has the same length (i.e. data frame is a "rectangular" list).
 
-![](exampleDF.png)
+![](pics/exampleDF.png)
 
 * Data frame can be created by important data into R (`read.csv()` and `read.table()`)
 * If all columns in a data frame are the same type, a data frame can be converted to a matrix using `as.matrix()`
@@ -514,7 +527,7 @@ Scientists often store data in Excel spreadsheets. There are various R packages 
 We can read in a CSV file (`Labmates.csv`) that contains each of our names and spirit animals. First, make sure you are located in the directory where the file is located. You can do this using the "set working directory" command (`setwd()`) or by manually choosing "Set As Working Directory" in your RStudio space. Then, you should be able to run the command:
 
 ```{r}
-my_data <- read.csv("Labmates.csv")
+my_data <- read.csv("data/Labmates.csv")
 
 ```
 
@@ -526,6 +539,8 @@ my_data <- read.csv(file.choose())
 
 Looks like we each have a spirit animal. Vinh san is not happy. He really loves cats. Plus, he really does not want to have a pangolin as a spirit animal these days. Let's switch the spirit animal of Vinh and Lindsay (who originally had cat). Then, let's also add a column to indicate who attended the R crash course today.
 
+![](pics/Fukkunsencho.png)
+
 ```{r, eval = FALSE}
 my_data[2,2] = "Cat"
 my_data[7,2] = "Pangolin"
@@ -535,13 +550,26 @@ my_data$Attendance = c(1,0,1,0,1,0,1)
 Now, we can save/write our updated file to a desired location. 
 
 ```{r, eval = FALSE}
-write.csv(my_data, file = 'LabmatesAttendance.csv')
+write.csv(my_data, file = 'data/LabmatesAttendance.csv')
 ```
 
 If you do not like the first column with the indices, you can save as follows:
 
 ```{r, eval = FALSE}
-write.csv(my_data, file = 'LabmatesAttendance.csv', row.names = FALSE)
+write.csv(my_data, file = 'data/LabmatesAttendance.csv', row.names = FALSE)
+```
+
+Note there is also a very flexible storage format in R in which you can save any type of object (not just CSV or data frame). This can be done with the RDS file format using the `saveRDS()` and the `readRDS()` functions.
+
+```{r, eval = FALSE}
+exampleVariable = saveRDS(my_data, file = "data/LabmatesAttendance.Rds")
+```
+
+We can now read in the object and, if desired, set it to a new variable `attendanceRDS`.
+
+```{r, eval = FALSE}
+attendanceRDS <- readRDS("data/LabmatesAttendance.Rds")
+str(attendanceRDS)
 ```
 
 ---
@@ -624,5 +652,86 @@ qplot(temperature, pressure, data = pressure, geom = c("line", "point"))
 
 There are countless other plots that can be made in base R and `ggplot2`, including box plots, bar plots, histograms, stem and leaf plots, mosaic plots. There are great online resources to practice making plots and entire textbooks. As shown earlier in this tutorial, there are also [cheat sheets](https://rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf) available in R Studio. With `ggplot2` graphics, you can also use additional packages to render them interactive fairly easily. You can see neat examples of this from the function `ggplotly` [here](https://www.r-graph-gallery.com/interactive-charts.html).
 
+# Downloading packages from multiple sources
 
+There are various ways to download R packages from online resources. Three common ways are on CRAN, GitHub, and Bioconductor. As an example, the `ggplot2` package is available on CRAN [here](https://cran.r-project.org/web/packages/ggplot2/index.html). Hence, we could install the CRAN version using the code we already saw:
+
+```{r, eval=FALSE}
+install.packages("ggplot2")
+```
+
+You can also install the developmental version from GitHub (if there is one). It seems `ggplot2` has a GitHub repository [here](https://github.com/tidyverse/ggplot2). The functionality to install a repository from GitHub into R can be done with the `devtools` package, which is on CRAN. Here, we first install the `devtools` package, read it into our R session, and then use one of its functions (`install_github()`) to install the `ggplot2` version on GitHub.
+
+```{r eval= FALSE}
+# install devtools package
+devtools::install_github("r-lib/devtools")
+library(devtools)
+
+devtools::install_github("tidyverse/ggplot2")
+```
+
+Some packages, especially ones that relate to bioinformatics, are on [Bioconductor](https://www.bioconductor.org/). For example, the RNA-seq analysis packages [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq.html) and [edgeR](https://bioconductor.org/packages/release/bioc/html/edgeR.html) are on Bioconductor. If you try to install these packages using the CRAN functionality, you will get an error (`package ‘edgeR’ is not available (for R version 4.0.2)`).
+
+```{r, eval = FALSE}
+install.packages("edgeR")
+```
+
+Instead, to install a Bioconductor package into R, you will need the following type of code:
+
+```{r, eval = FALSE}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("edgeR")
+```
+
+# Creating a minimal working example
+
+Sometimes you cannot troubleshoot an error in R, even after thinking carefully and reading about potential underlying causes. One thing you may want to do in that case is ask a colleague or post on [StackOverflow](https://stackoverflow.com/). Sometimes you cannot show your real data (due to privacy issues). Moreover, on StackOverflow, you cannot upload any data. Hence, you often need to create a "minimal working example": that is, a simulated dataset that has the same data types and formats as your real data that can be used to simulate the error. Let's look at an example of how to do this.
+
+Say, you are working with a sensitive dataset. Let's read it in first.
+
+```{r}
+senDF <- readRDS("data/sensitiveData.Rds")
+```
+
+We can see this dataset contains patient names, sound gene count information, and a phenotype that could be sensitive (cancer status, mental illness, etc).
+
+```{r}
+str(senDF)
+```
+
+Say you wanted to sum up all the gene counts in this dataset. Usually, this can be achieved easily by applying the `sum()` function to the corresponding column. However, when we try to do this, we receive an error ("'sum' not meaningful for factors"): 
+
+```{r, eval=FALSE}
+sum(senDF$geneCount)
+```
+
+If you are unable to figure out this error and want to consult colleagues or StackOverflow, you will need to provide code to them that creates a minimal working example data frame (`mweDF`) that has the same data types as your sensitive data frame (`senDF`).
+
+```{r}
+patient = paste0("Patient", 1:100)
+geneCount = as.factor(sample(1:100, 100, replace=TRUE))
+phenotype = sample(c("Yes","No"), 100, replace = TRUE)
+mweDF = data.frame(patient = patient, geneCount = geneCount, phenotype = phenotype)
+str(mweDF)
+```
+
+Then, your colleagues can simulate your error by running the `sum()` function on your simulated data frame.
+
+```{r, eval = FALSE}
+sum(mweDF$geneCount)
+```
+
+If they have more experience, they can then provide a suggestion. In this case, to change your `geneCount` column to be of numeric type.
+
+```{r}
+mweDF$geneCount = as.numeric(mweDF$geneCount)
+```
+
+Indeed, we now no longer get that error and can successfully sum that column.
+
+```{r}
+sum(mweDF$geneCount)
+```
 
