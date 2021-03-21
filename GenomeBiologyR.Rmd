@@ -735,3 +735,8 @@ Indeed, we now no longer get that error and can successfully sum that column.
 sum(mweDF$geneCount)
 ```
 
+# Challange with corrplot
+
+Before her rotation ends, Sunanda wants to replicate a figure she found in a journal article that was created using the `corrplot` package. Based on this brief R crash course, are you able to replicate the first few figures from the [`corrplot` vignette?](https://cran.r-project.org/web/packages/corrplot/vignettes/corrplot-intro.html)
+
+
