@@ -23,7 +23,7 @@ knitr::opts_chunk$set(echo = TRUE)
 * Text file containing a set of commands and comments (`#`)
 * Script can be saved and used later to re-execute the saved commands
 * Script can be edited so you can execute a modified version of the commands.
-* SAves as `.R` file
+* Saves as `.R` file
 
 ---
 
@@ -131,7 +131,7 @@ x
 We can perform arithmetic on variables.
 
 ```{r}
-# Assign the value 19 to x
+# Assign the value 7 to y
 y <- 7
 
 # Add the values of x and y and store the result in z
@@ -165,7 +165,7 @@ sumTwoValues(x, y)
 ```
 
 ```{r}
-sumTwoValues(100,80)
+sumTwoValues(x=100,y=80)
 ```
 
 Here is another example of creating a function in R that converts fahrenheit to celsius. This function requires one input parameter `temp_F` from the user.
@@ -219,7 +219,7 @@ Instead, let's run a `help()` command on the `seq()` function. We can do this by
 
 ```{r}
 help(seq)
-?(seq)
+?seq
 ```
 
 Both below code perform the same task and create the values 30, 40, 50, 60, 70. Note that you do not have to explicitly call the input parameter name for the command to work.
@@ -409,7 +409,7 @@ Another way to fill matrices is to bind columns or rows using `rbind()` and `cbi
 ```{r}
 x <- 4:6
 y <- 10:12
-cbind(x, y)
+m <- cbind(x, y)
 ```
 
 ```{r}
@@ -463,7 +463,7 @@ A data frame is one of the most important data types in R and is often used for 
 
 ![](pics/exampleDF.png)
 
-* Data frame can be created by important data into R (`read.csv()` and `read.table()`)
+* Data frame can be created by importing data into R (`read.csv()` and `read.table()`)
 * If all columns in a data frame are the same type, a data frame can be converted to a matrix using `as.matrix()`
 * Data frame can be created in R with `data.frame()` function.
 * Rownames are often automatically generated as 1, 2, ..., _n_. Row numbers can become inconsistent when data frame is reshuffled or subset.
@@ -544,7 +544,7 @@ Looks like we each have a spirit animal. Vinh san is not happy. He really loves 
 ```{r, eval = FALSE}
 my_data[2,2] = "Cat"
 my_data[7,2] = "Pangolin"
-my_data$Attendance = c(1,0,1,0,1,0,1)
+my_data$Attendance = c(1,1,1,1,1,0,1)
 ```
 
 Now, we can save/write our updated file to a desired location. 
@@ -664,7 +664,7 @@ You can also install the developmental version from GitHub (if there is one). It
 
 ```{r eval= FALSE}
 # install devtools package
-devtools::install_github("r-lib/devtools")
+install.packages("devtools")
 library(devtools)
 
 devtools::install_github("tidyverse/ggplot2")
@@ -735,7 +735,7 @@ Indeed, we now no longer get that error and can successfully sum that column.
 sum(mweDF$geneCount)
 ```
 
-# Challange with corrplot
+# Challenge with corrplot
 
 Before her rotation ends, Sunanda wants to replicate a figure she found in a journal article that was created using the `corrplot` package. Based on this brief R crash course, are you able to replicate the first few figures from the [`corrplot` vignette?](https://cran.r-project.org/web/packages/corrplot/vignettes/corrplot-intro.html)
 
